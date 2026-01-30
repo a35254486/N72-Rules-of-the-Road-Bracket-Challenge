@@ -5,264 +5,369 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Rules of the Road March Madness</title>
     <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;600;700&family=Roboto+Condensed:wght@400;700&display=swap" rel="stylesheet">
-<style>
-    :root {
-        --primary: #003B4F;
-        --accent: #E8B00F;
-        --bg: #FFFFFF;
-        --light-gray: #F5F5F5;
-        --border: #bbbbbb;
-    }
-    * {
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-    }
-    body {
-        font-family: 'Roboto Condensed', sans-serif;
-        background: var(--light-gray);
-        min-height: 100vh;
-        /* REDUCED PADDING */
-        padding: 1rem;
-    }
-    .container {
-        max-width: 100%;
-        margin: 0 auto;
-        background: var(--bg);
-        border-radius: 10px;
-        box-shadow: 0 4px 20px rgba(0, 59, 79, 0.15);
-        /* REDUCED PADDING */
-        padding: 1rem;
-    }
-    header {
-        text-align: center;
-        margin-bottom: 2rem;
-    }
-    h1 {
-        font-family: 'Oswald', sans-serif;
-        font-size: 4.0rem;
-        color: var(--primary);
-        letter-spacing: 2px;
-        text-transform: uppercase;
-        font-weight: 700;
-        margin-bottom: 0.5rem;
-    }
-    .subtitle {
-        font-size: 2.5rem;
-        color: var(--primary);
-        font-weight: 700;
-    }
-    .controls {
-        display: flex;
-        gap: 1rem;
-        justify-content: center;
-        margin-bottom: 2rem;
-        flex-wrap: wrap;
-    }
-    .zoom-controls {
-        display: flex;
-        gap: 0.5rem;
-        align-items: center;
-    }
-    .zoom-controls span {
-        font-weight: 600;
-        color: var(--primary);
-        min-width: 60px;
-        text-align: center;
-    }
-    button {
-        font-family: 'Roboto Condensed', sans-serif;
-        font-weight: 700;
-        font-size: 0.95rem;
-        padding: 0.75rem 1.5rem;
-        border: none;
-        border-radius: 6px;
-        cursor: pointer;
-        transition: all 0.2s ease;
-        text-transform: uppercase;
-        letter-spacing: 0.5px;
-    }
-    .btn-primary {
-        background: var(--primary);
-        color: white;
-    }
-    .btn-primary:hover {
-        background: #005266;
-        transform: translateY(-2px);
-    }
-    .btn-secondary {
-        background: var(--accent);
-        color: var(--primary);
-    }
-    .btn-secondary:hover {
-        background: #D4A20D;
-        transform: translateY(-2px);
-    }
-    .btn-accent {
-        background: white;
-        color: var(--primary);
-        border: 2px solid var(--primary);
-    }
-    .btn-accent:hover {
-        background: var(--primary);
-        color: white;
-    }
-    .bracket-scroll {
-        overflow: auto;
-        padding: 2rem 0;
-        position: relative;
-        overscroll-behavior-inline: contain;
-        scroll-padding-inline: 24px;
-    }
-    .bracket-container {
-        transform-origin: top left;
-        transition: transform 0.2s ease;
-        display: inline-block;
-        min-width: auto;
-    }
-    .bracket {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        gap: 60px;
-        min-width: max-content;
-    }
-    .bracket-half {
-        display: flex;
-        gap: 60px;
-    }
-    .bracket-half.left {
-        flex-direction: row;
-    }
-    .bracket-half.right {
-        flex-direction: row-reverse;
-    }
-    .finals-column {
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-    }
-    .round {
-        display: flex;
-        flex-direction: column;
-        justify-content: space-around;
-    }
-    .round-header {
-        font-family: 'Oswald', sans-serif;
-        font-size: 1.3rem;
-        color: var(--primary);
-        font-weight: 600;
-        margin-bottom: 1.5rem;
-        letter-spacing: 1px;
-    }
-    .bracket-half.left .round-header { text-align: right; }
-    .bracket-half.right .round-header { text-align: left; }
-    .round-matches {
-        display: flex;
-        flex-direction: column;
-        justify-content: space-around;
-        flex: 1;
-    }
-    .match {
-        position: relative;
-    }
-    .round1 .match { margin: 10px 0; }
-    .round2 .match { margin: 54px 0; }
-    .round3 .match { margin: 142px 0; }
-    .round4 .match { margin: 318px 0; }
-    .round5 .match { margin: 670px 0; }
-    .round6 .match { margin: 0; }
-    .match-line {
-        position: relative;
-    }
-    .team {
-        background: white;
-        border: 2px solid var(--border);
-        padding: 10px 15px;
-        min-width: 200px;
-        cursor: pointer;
-        transition: all 0.2s ease;
-        font-weight: 600;
-        font-size: 0.95rem;
-        position: relative;
-        z-index: 1; /* This is required to make the team boxes sit ON TOP of the lines */
-    }
-    .team:first-child {
-        border-bottom: 1px solid var(--border);
-        border-radius: 4px 4px 0 0;
-    }
-    .team:last-child {
-        border-top: 1px solid var(--border);
-        border-radius: 0 0 4px 4px;
-    }
-    .bracket-half.left .team:hover { transform: translateX(3px); }
-    .bracket-half.right .team:hover { transform: translateX(-3px); }
-    .team.winner {
-        background: var(--primary);
-        color: white;
-        border-color: var(--primary);
-        font-weight: 700;
-    }
-    .team.loser {
-        background: var(--light-gray);
-        color: #999;
-        opacity: 0.6;
-    }
-    .team.highlighted {
-        background: var(--accent);
-        color: var(--primary);
-        border-color: var(--accent);
-        font-weight: 700;
-    }
-    .seed {
-        display: none;
-    }
-    .winner .seed {
-        background: var(--accent);
-        color: var(--primary);
-    }
-    .champion-display { text-align: center; margin-top: 3rem; padding: 2rem; background: var(--primary); border: 4px solid var(--accent); border-radius: 8px; display: none; }
-    .champion-display.show { display: block; animation: slideIn 0.5s ease; }
-    @keyframes slideIn { from { opacity: 0; transform: translateY(-20px); } to { opacity: 1; transform: translateY(0); } }
-    .champion-display h2 { font-family: 'Oswald', sans-serif; font-size: 3.0rem; color: var(--accent); margin-bottom: 1rem; font-weight: 700; letter-spacing: 2px; }
-    .champion-name { font-size: 2rem; font-weight: 700; color: white; }
-    
-    .match::before, .match::after {
-        content: '';
-        position: absolute;
-        background: var(--primary);
-    }
-    .match::after {
-        top: 50%;
-        transform: translateY(-50%);
-        width: 30px;
-        height: 2px;
-    }
-    .round-matches .match:nth-of-type(2n-1)::before {
-        top: 50%;
-        width: 2px;
-    }
-    .round-matches .match:nth-of-type(2n)::before {
-        display: none;
-    }
-    .bracket-half.left .match::after { left: 100%; }
-    .bracket-half.left .round-matches .match:nth-of-type(2n-1)::before { left: calc(100% + 30px); }
-    .bracket-half.right .match::after { right: 100%; }
-    .bracket-half.right .round-matches .match:nth-of-type(2n-1)::before { right: calc(100% + 30px); }
-    .round1 .round-matches .match:nth-of-type(2n-1)::before { height: calc(100% + 20px); }
-    .round2 .round-matches .match:nth-of-type(2n-1)::before { height: calc(100% + 108px); }
-    .round3 .round-matches .match:nth-of-type(2n-1)::before { height: calc(100% + 284px); }
-    .round4 .round-matches .match:nth-of-type(2n-1)::before { height: calc(100% + 636px); }
-    .round5 .round-matches .match:nth-of-type(2n-1)::before { height: calc(100% + 1340px); }
-    .finals-column .match::before,
-    .finals-column .match::after,
-    .round6 .match::before,
-    .round6 .match::after {
-        display: none;
-    }
-</style>
+    <style>
+        :root {
+            --primary: #003B4F;
+            --accent: #E8B00F;
+            --bg: #FFFFFF;
+            --light-gray: #F5F5F5;
+            --border: #bbbbbb;
+        }
 
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Roboto Condensed', sans-serif;
+            background: var(--light-gray);
+            min-height: 125vh;
+            padding: 2rem 1rem;
+        }
+
+        .container {
+            max-width: 100%;
+            margin: 0 auto;
+            background: var(--bg);
+            border-radius: 10px;
+            box-shadow: 0 4px 20px rgba(0, 59, 79, 0.15);
+            padding: 2rem;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        h1 {
+            font-family: 'Oswald', sans-serif;
+            font-size: 4.0rem;
+            color: var(--primary);
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .subtitle {
+            font-size: 2.5rem;
+            color: var(--primary);
+            font-weight: 700;
+        }
+
+        .controls {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .zoom-controls {
+            display: flex;
+            gap: 0.5rem;
+            align-items: center;
+        }
+
+        .zoom-controls span {
+            font-weight: 600;
+            color: var(--primary);
+            min-width: 60px;
+            text-align: center;
+        }
+
+        button {
+            font-family: 'Roboto Condensed', sans-serif;
+            font-weight: 700;
+            font-size: 0.95rem;
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #005266;
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            background: var(--accent);
+            color: var(--primary);
+        }
+
+        .btn-secondary:hover {
+            background: #D4A20D;
+            transform: translateY(-2px);
+        }
+
+        .btn-accent {
+            background: white;
+            color: var(--primary);
+            border: 2px solid var(--primary);
+        }
+
+        .btn-accent:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        .bracket-scroll {
+            overflow: auto;
+            padding: 2rem 0;
+            position: relative;
+        }
+
+        .bracket-container {
+            transform-origin: top center;
+            transition: transform 0.2s ease;
+            display: inline-block;
+            min-width: 100%;
+        }
+
+        .bracket {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 60px;
+            min-width: max-content;
+        }
+
+        .bracket-half {
+            display: flex;
+            gap: 60px;
+        }
+
+        .bracket-half.left {
+            flex-direction: row;
+        }
+
+        .bracket-half.right {
+            flex-direction: row-reverse;
+        }
+
+        .finals-column {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .round {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-around;
+        }
+
+        .round-header {
+            font-family: 'Oswald', sans-serif;
+            font-size: 1.3rem;
+            color: var(--primary);
+            text-align: center;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            letter-spacing: 1px;
+        }
+
+        .round-matches {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-around;
+            flex: 1;
+        }
+
+        .match {
+            position: relative;
+            margin: 10px 0;
+        }
+
+        .match-line {
+            position: relative;
+        }
+
+        .team {
+            background: white;
+            border: 2px solid var(--border);
+            padding: 10px 15px;
+            min-width: 200px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            position: relative;
+            font-weight: 600;
+            font-size: 0.95rem;
+        }
+
+        .team:first-child {
+            border-bottom: 1px solid var(--border);
+            border-radius: 4px 4px 0 0;
+        }
+
+        .team:last-child {
+            border-top: 1px solid var(--border);
+            border-radius: 0 0 4px 4px;
+        }
+
+        .team:hover {
+            border-color: var(--accent);
+            background: #FFFEF5;
+            transform: translateX(3px);
+        }
+
+        .team.winner {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+            font-weight: 700;
+        }
+
+        .team.loser {
+            background: var(--light-gray);
+            color: #999;
+            opacity: 0.6;
+        }
+
+        .team.highlighted {
+            background: var(--accent);
+            color: var(--primary);
+            border-color: var(--accent);
+            font-weight: 700;
+        }
+
+        .seed {
+            display: inline-block;
+            background: var(--accent);
+            color: var(--primary);
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-size: 0.75rem;
+            margin-right: 8px;
+            font-weight: 700;
+            min-width: 24px;
+            text-align: center;
+        }
+
+        .winner .seed {
+            background: var(--accent);
+            color: var(--primary);
+        }
+
+        /* Connector lines - horizontal from match */
+        .match::after {
+            content: '';
+            position: absolute;
+            left: 100%;
+            top: 50%;
+            width: 30px;
+            height: 2px;
+            background: var(--primary);
+        }
+
+        /* Vertical lines connecting pairs */
+        .match:nth-child(odd)::before {
+            content: '';
+            position: absolute;
+            left: calc(100% + 30px);
+            top: 50%;
+            width: 2px;
+            background: var(--primary);
+        }
+
+        .match:nth-child(even)::before {
+            content: '';
+            position: absolute;
+            left: calc(100% + 30px);
+            bottom: 50%;
+            width: 2px;
+            background: var(--primary);
+        }
+
+        /* Don't show connectors on the last round */
+        .round:last-child .match::after,
+        .round:last-child .match::before {
+            display: none;
+        }
+
+        /* Specific heights for vertical connectors by round */
+        .round1 .match:nth-child(odd)::before { height: 58px; }
+        .round1 .match:nth-child(even)::before { height: 58px; }
+        
+        .round2 .match:nth-child(odd)::before { height: 146px; }
+        .round2 .match:nth-child(even)::before { height: 146px; }
+        
+        .round3 .match:nth-child(odd)::before { height: 322px; }
+        .round3 .match:nth-child(even)::before { height: 322px; }
+        
+        .round4 .match:nth-child(odd)::before { height: 674px; }
+        .round4 .match:nth-child(even)::before { height: 674px; }
+        
+        .round5 .match:nth-child(odd)::before { height: 1378px; }
+        .round5 .match:nth-child(even)::before { height: 1378px; }
+
+        /* Spacing between matches by round */
+        .round1 .match { margin: 10px 0; }
+        .round2 .match { margin: 54px 0; }
+        .round3 .match { margin: 142px 0; }
+        .round4 .match { margin: 318px 0; }
+        .round5 .match { margin: 670px 0; }
+        .round6 .match { margin: 0; }
+
+        .champion-display {
+            text-align: center;
+            margin-top: 3rem;
+            padding: 2rem;
+            background: var(--primary);
+            border: 4px solid var(--accent);
+            border-radius: 8px;
+            display: none;
+        }
+
+        .champion-display.show {
+            display: block;
+            animation: slideIn 0.5s ease;
+        }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .champion-display h2 {
+            font-family: 'Oswald', sans-serif;
+            font-size: 2.5rem;
+            color: var(--accent);
+            margin-bottom: 1rem;
+            font-weight: 700;
+            letter-spacing: 2px;
+        }
+
+        .champion-name {
+            font-size: 2rem;
+            font-weight: 700;
+            color: white;
+        }
+    
+/* === Right-side connectors face inward; hover/header align inward === */
+.bracket-half.right .match::after { left: auto; right: 100%; width: 30px; height: 2px; background: var(--primary); }
+.bracket-half.right .match:nth-child(odd)::before,
+.bracket-half.right .match:nth-child(even)::before { left: auto; right: calc(100% + 30px); width: 2px; background: var(--primary); }
+.bracket-half.left .team:hover { transform: translateX(3px); }
+.bracket-half.right .team:hover { transform: translateX(-3px); }
+.bracket-half.left .round-header { text-align: right; }
+.bracket-half.right .round-header { text-align: left; }
+.bracket-scroll { overscroll-behavior-inline: contain; scroll-padding-inline: 24px; }
+.bracket-container { min-width: auto; transform-origin: top left; }
+
+</style>
 </head>
 <body>
     <div class="container">
@@ -293,279 +398,345 @@
         </div>
     </div>
 
-<script>
-    let players = [
-        // Region 1
-        "Patrick Vivian",        // 1
-        "BYE",                     // 16
-        "Jonathan Sodano",        // 8
-        "Branden Ward",           // 9
-        "Kevin Sweetman",         // 5
-        "William Lyons",          // 12
-        "Geoffrey Welch",         // 4
-        "BYE",                     // 13
-        "David Harland",          // 6
-        "Robert Beurket",         // 11
-        "Wyatt Moore",            // 3
-        "BYE",                     // 14
-        "Blake Fontaine",         // 7
-        "Ben Severson",      // 10
-        "David Kane",             // 2
-        "BYE",                     // 15
-        // Region 2
-        "Meredith Engel",         // 1
-        "BYE",                     // 16
-        "Walt O'Donnell",       // 8
-        "Tanner Blythe",        // 9
-        "Katie Moore",            // 5
-        "Jerry Tredo",           // 12
-        "Gregory Christod",       // 4
-        "BYE",                     // 13
-        "Alexander Kavall",       // 6
-        "Montraye Whaley",        // 11
-        "John O'Connell",         // 3
-        "BYE",                     // 14
-        "Branner Astrop",         // 7
-        "Gregory Holmes",         // 10
-        "Ted Olson",         // 2
-        "BYE",                     // 15
-        // Region 3
-        "Kevin Brunner",          // 1
-        "BYE",                     // 16
-        "Jonathon Zitt",          // 8
-        "Jocelyn Addeo",          // 9
-        "David Parkhurst",        // 5
-        "Tim Steadman",       // 12
-        "Davis Chandler",         // 4
-        "BYE",                     // 13
-        "Kellen Gray",            // 6
-        "Robert Papili",          // 11
-        "Alex Egbers",            // 3
-        "BYE",                     // 14
-        "Lee McDonough",          // 7
-        "Daniel Urbano",          // 10
-        "Seth Bradley",           // 2
-        "BYE",                     // 15
-        // Region 4
-        "Michael Shanley",        // 1
-        "BYE",                     // 16
-        "Tony Kennedy",        // 8
-        "Ian Johnson",            // 9
-        "Phil Lapointe",        // 5
-        "Michael Chesnut",        // 12
-        "Gabriel Ptasienski",     // 4
-        "BYE",                     // 13
-        "Alexander McQuain",      // 6
-        "Jacob Vehrs",            // 11
-        "David Carrillo",         // 3
-        "BYE",                     // 14
-        "Steven Tommasello",      // 7
-        "Benjamin Deforest",      // 10
-        "Kat Hunter",         // 2
-        "BYE"                      // 15
-    ];
+    <script>
+        let players = [
+            // Region 1
+            "Patrick Vivian",        // 1
+            "BYE",                     // 16
+            "Jonathan Sodano",        // 8
+            "Branden Ward",           // 9
+            "Kevin Sweetman",         // 5
+            "William Lyons",          // 12
+            "Geoffrey Welch",         // 4
+            "BYE",                     // 13
+            "David Harland",          // 6
+            "Robert Beurket",         // 11
+            "Wyatt Moore",            // 3
+            "BYE",                     // 14
+            "Blake Fontaine",         // 7
+            "Ben Severson",      // 10
+            "David Kane",             // 2
+            "BYE",                     // 15
+            // Region 2
+            "Meredith Engel",         // 1
+            "BYE",                     // 16
+            "Walt O'Donnell",       // 8
+            "Tanner Blythe",        // 9
+            "Katie Moore",            // 5
+            "Jerry Tredo",           // 12
+            "Gregory Christod",       // 4
+            "BYE",                     // 13
+            "Alexander Kavall",       // 6
+            "Montraye Whaley",        // 11
+            "John O'Connell",         // 3
+            "BYE",                     // 14
+            "Branner Astrop",         // 7
+            "Gregory Holmes",         // 10
+            "Ted Olson",         // 2
+            "BYE",                     // 15
+            // Region 3
+            "Kevin Brunner",          // 1
+            "BYE",                     // 16
+            "Jonathon Zitt",          // 8
+            "Jocelyn Addeo",          // 9
+            "David Parkhurst",        // 5
+            "Tim Steadman",       // 12
+            "Davis Chandler",         // 4
+            "BYE",                     // 13
+            "Kellen Gray",            // 6
+            "Robert Papili",          // 11
+            "Alex Egbers",            // 3
+            "BYE",                     // 14
+            "Lee McDonough",          // 7
+            "Daniel Urbano",          // 10
+            "Seth Bradley",           // 2
+            "BYE",                     // 15
+            // Region 4
+            "Michael Shanley",        // 1
+            "BYE",                     // 16
+            "Tony Kennedy",        // 8
+            "Ian Johnson",            // 9
+            "Phil Lapointe",        // 5
+            "Michael Chesnut",        // 12
+            "Gabriel Ptasienski",     // 4
+            "BYE",                     // 13
+            "Alexander McQuain",      // 6
+            "Jacob Vehrs",            // 11
+            "David Carrillo",         // 3
+            "BYE",                     // 14
+            "Steven Tommasello",      // 7
+            "Benjamin Deforest",      // 10
+            "Kat Hunter",         // 2
+            "BYE"                      // 15
+        ];
 
-    const rounds = [
-        { name: 'FIRST ROUND', matches: 32, class: 'round1' },
-        { name: 'SECOND ROUND', matches: 16, class: 'round2' },
-        { name: 'SWEET 16', matches: 8, class: 'round3' },
-        { name: 'ELITE 8', matches: 4, class: 'round4' },
-        { name: 'FINAL 4', matches: 2, class: 'round5' },
-        { name: 'CHAMPIONSHIP', matches: 1, class: 'round6' }
-    ];
+        const rounds = [
+            { name: 'FIRST ROUND', matches: 32, class: 'round1' },
+            { name: 'SECOND ROUND', matches: 16, class: 'round2' },
+            { name: 'SWEET 16', matches: 8, class: 'round3' },
+            { name: 'ELITE 8', matches: 4, class: 'round4' },
+            { name: 'FINAL 4', matches: 2, class: 'round5' },
+            { name: 'CHAMPIONSHIP', matches: 1, class: 'round6' }
+        ];
 
-    let bracketData = {};
-    let baseZoom = 1.0; // The calculated zoom level to fit the screen
-    let manualZoom = 1.0; // The user's adjustment, starts at 100%
+        let bracketData = {};
+        let zoomLevel = 1;
 
-    function zoomIn() {
-        zoomLevel = Math.min(zoomLevel + 0.1, 2);
-        updateZoom();
-    }
-
-    function zoomOut() {
-        zoomLevel = Math.max(zoomLevel - 0.1, 0.3);
-        updateZoom();
-    }
-
-    function updateZoom() {
-        const container = document.getElementById('bracketContainer');
-        container.style.zoom = zoomLevel;
-        document.getElementById('zoomLevel').textContent = Math.round(zoomLevel * 100) + '%';
-    }
-
-    function initializeBracket() {
-        bracketData = {};
-        const bracket = document.getElementById('bracket');
-        bracket.innerHTML = '';
-        const leftHalf = document.createElement('div');
-        leftHalf.className = 'bracket-half left';
-        const rightHalf = document.createElement('div');
-        rightHalf.className = 'bracket-half right';
-        for (let roundIndex = 0; roundIndex < 5; roundIndex++) {
-            const round = rounds[roundIndex];
-            const leftRoundDiv = createRound(round, roundIndex, 0, round.matches / 2);
-            leftHalf.appendChild(leftRoundDiv);
-            const rightRoundDiv = createRound(round, roundIndex, round.matches / 2, round.matches / 2);
-            rightHalf.appendChild(rightRoundDiv);
+        function zoomIn() {
+            zoomLevel = Math.min(zoomLevel + 0.1, 2);
+            updateZoom();
         }
-        const finalsDiv = document.createElement('div');
-        finalsDiv.className = 'finals-column';
-        const finalsRound = createRound(rounds[5], 5, 0, 1);
-        finalsDiv.appendChild(finalsRound);
-        bracket.appendChild(leftHalf);
-        bracket.appendChild(finalsDiv);
-        bracket.appendChild(rightHalf);
-        attachClickHandlers();
-        attachHoverHandlers();
-    }
 
-    function createRound(round, roundIndex, startMatch, matchCount) {
-        const roundDiv = document.createElement('div');
-        roundDiv.className = `round ${round.class}`;
-        const header = document.createElement('div');
-        header.className = 'round-header';
-        header.textContent = round.name;
-        roundDiv.appendChild(header);
-        const matchesDiv = document.createElement('div');
-        matchesDiv.className = 'round-matches';
-        for (let i = 0; i < matchCount; i++) {
-            const matchIndex = startMatch + i;
-            const matchId = `r${roundIndex}-m${matchIndex}`;
-            const matchDiv = document.createElement('div');
-            matchDiv.className = 'match';
-            matchDiv.dataset.matchId = matchId;
-            if (roundIndex === 0) {
-                const p1Index = matchIndex * 2;
-                const p2Index = matchIndex * 2 + 1;
-                const seedPattern = [1, 16, 8, 9, 5, 12, 4, 13, 6, 11, 3, 14, 7, 10, 2, 15];
-                const matchInRegion = matchIndex % 8;
-                const seed1 = seedPattern[matchInRegion * 2];
-                const seed2 = seedPattern[matchInRegion * 2 + 1];
-                bracketData[matchId] = {
-                    teams: [{ name: players[p1Index], seed: seed1 }, { name: players[p2Index], seed: seed2 }],
-                    winner: null
-                };
-                matchDiv.innerHTML = `
-                    <div class="match-line">
-                        <div class="team" data-match="${matchId}" data-team="0"><span class="seed">${seed1}</span>${players[p1Index]}</div>
-                        <div class="team" data-match="${matchId}" data-team="1"><span class="seed">${seed2}</span>${players[p2Index]}</div>
-                    </div>`;
-            } else {
-                bracketData[matchId] = {
-                    teams: [{ name: 'TBD', seed: null }, { name: 'TBD', seed: null }],
-                    winner: null
-                };
-                matchDiv.innerHTML = `
-                    <div class="match-line">
-                        <div class="team" data-match="${matchId}" data-team="0"><span class="seed">-</span>TBD</div>
-                        <div class="team" data-match="${matchId}" data-team="1"><span class="seed">-</span>TBD</div>
-                    </div>`;
+        function zoomOut() {
+            zoomLevel = Math.max(zoomLevel - 0.1, 0.3);
+            updateZoom();
+        }
+
+        function updateZoom() {
+            const container = document.getElementById('bracketContainer');
+            container.style.zoom = zoomLevel;;
+            document.getElementById('zoomLevel').textContent = Math.round(zoomLevel * 100) + '%';
+        }
+
+        function initializeBracket() {
+            bracketData = {};
+            const bracket = document.getElementById('bracket');
+            bracket.innerHTML = '';
+
+            // Create left half (regions 1 and 2)
+            const leftHalf = document.createElement('div');
+            leftHalf.className = 'bracket-half left';
+
+            // Create right half (regions 3 and 4)
+            const rightHalf = document.createElement('div');
+            rightHalf.className = 'bracket-half right';
+
+            // Build rounds for each half
+            for (let roundIndex = 0; roundIndex < 5; roundIndex++) {
+                const round = rounds[roundIndex];
+                
+                // Left side round
+                const leftRoundDiv = createRound(round, roundIndex, 0, round.matches / 2);
+                leftHalf.appendChild(leftRoundDiv);
+                
+                // Right side round (reversed order for visual symmetry)
+                const rightRoundDiv = createRound(round, roundIndex, round.matches / 2, round.matches / 2);
+                rightHalf.appendChild(rightRoundDiv);
             }
-            matchesDiv.appendChild(matchDiv);
+
+            // Create finals in the middle
+            const finalsDiv = document.createElement('div');
+            finalsDiv.className = 'finals-column';
+            const finalsRound = createRound(rounds[5], 5, 0, 1);
+            finalsDiv.appendChild(finalsRound);
+
+            bracket.appendChild(leftHalf);
+            bracket.appendChild(finalsDiv);
+            bracket.appendChild(rightHalf);
+
+            attachClickHandlers();
+            attachHoverHandlers();
         }
-        roundDiv.appendChild(matchesDiv);
-        return roundDiv;
-    }
 
-    function attachClickHandlers() {
-        document.querySelectorAll('.team').forEach(team => {
-            team.addEventListener('click', function() {
-                const matchId = this.dataset.match;
-                const teamIndex = parseInt(this.dataset.team);
-                selectWinner(matchId, teamIndex);
+        function createRound(round, roundIndex, startMatch, matchCount) {
+            const roundDiv = document.createElement('div');
+            roundDiv.className = `round ${round.class}`;
+            
+            const header = document.createElement('div');
+            header.className = 'round-header';
+            header.textContent = round.name;
+            roundDiv.appendChild(header);
+
+            const matchesDiv = document.createElement('div');
+            matchesDiv.className = 'round-matches';
+
+            for (let i = 0; i < matchCount; i++) {
+                const matchIndex = startMatch + i;
+                const matchId = `r${roundIndex}-m${matchIndex}`;
+                const matchDiv = document.createElement('div');
+                matchDiv.className = 'match';
+                matchDiv.dataset.matchId = matchId;
+
+                if (roundIndex === 0) {
+                    // First round - assign initial players
+                    const p1Index = matchIndex * 2;
+                    const p2Index = matchIndex * 2 + 1;
+                    
+                    // Tournament seeding pattern: 1v16, 8v9, 5v12, 4v13, 6v11, 3v14, 7v10, 2v15
+                    const seedPattern = [1, 16, 8, 9, 5, 12, 4, 13, 6, 11, 3, 14, 7, 10, 2, 15];
+                    const matchInRegion = matchIndex % 8;
+                    
+                    const seed1 = seedPattern[matchInRegion * 2];
+                    const seed2 = seedPattern[matchInRegion * 2 + 1];
+
+                    bracketData[matchId] = {
+                        teams: [
+                            { name: players[p1Index], seed: seed1 },
+                            { name: players[p2Index], seed: seed2 }
+                        ],
+                        winner: null
+                    };
+
+                    matchDiv.innerHTML = `
+                        <div class="match-line">
+                            <div class="team" data-match="${matchId}" data-team="0">
+                                <span class="seed">${seed1}</span>${players[p1Index]}
+                            </div>
+                            <div class="team" data-match="${matchId}" data-team="1">
+                                <span class="seed">${seed2}</span>${players[p2Index]}
+                            </div>
+                        </div>
+                    `;
+                } else {
+                    // Later rounds - TBD
+                    bracketData[matchId] = {
+                        teams: [
+                            { name: 'TBD', seed: null },
+                            { name: 'TBD', seed: null }
+                        ],
+                        winner: null
+                    };
+
+                    matchDiv.innerHTML = `
+                        <div class="match-line">
+                            <div class="team" data-match="${matchId}" data-team="0">
+                                <span class="seed">-</span>TBD
+                            </div>
+                            <div class="team" data-match="${matchId}" data-team="1">
+                                <span class="seed">-</span>TBD
+                            </div>
+                        </div>
+                    `;
+                }
+
+                matchesDiv.appendChild(matchDiv);
+            }
+
+            roundDiv.appendChild(matchesDiv);
+            return roundDiv;
+        }
+
+        function attachClickHandlers() {
+            document.querySelectorAll('.team').forEach(team => {
+                team.addEventListener('click', function() {
+                    const matchId = this.dataset.match;
+                    const teamIndex = parseInt(this.dataset.team);
+                    selectWinner(matchId, teamIndex);
+                });
             });
-        });
-    }
+        }
 
-    function attachHoverHandlers() {
-        document.querySelectorAll('.team').forEach(team => {
-            team.addEventListener('mouseenter', function() {
-                const seedElement = this.querySelector('.seed');
-                if (seedElement) {
-                    const fullText = this.textContent.trim();
-                    const seedText = seedElement.textContent.trim();
-                    const name = fullText.substring(seedText.length).trim();
-                    highlightPlayer(name);
+        function attachHoverHandlers() {
+            document.querySelectorAll('.team').forEach(team => {
+                team.addEventListener('mouseenter', function() {
+                    // Get just the name part (everything after the seed badge)
+                    const seedElement = this.querySelector('.seed');
+                    if (seedElement) {
+                        const fullText = this.textContent.trim();
+                        const seedText = seedElement.textContent.trim();
+                        const name = fullText.substring(seedText.length).trim();
+                        highlightPlayer(name);
+                    }
+                });
+                team.addEventListener('mouseleave', clearHighlights);
+            });
+        }
+
+        function selectWinner(matchId, teamIndex) {
+            const match = bracketData[matchId];
+            const team = match.teams[teamIndex];
+
+            if (team.name === 'TBD') return;
+
+            // Mark winner in data
+            match.winner = teamIndex;
+
+            // Update UI
+            const matchDiv = document.querySelector(`[data-match-id="${matchId}"]`);
+            const teams = matchDiv.querySelectorAll('.team');
+            teams.forEach((t, idx) => {
+                t.classList.remove('winner', 'loser');
+                if (idx === teamIndex) {
+                    t.classList.add('winner');
+                } else {
+                    t.classList.add('loser');
                 }
             });
-            team.addEventListener('mouseleave', clearHighlights);
-        });
-    }
 
-    function selectWinner(matchId, teamIndex) {
-        const match = bracketData[matchId];
-        const team = match.teams[teamIndex];
-        if (team.name === 'TBD' || team.name === 'BYE') return;
-        match.winner = teamIndex;
-        const matchDiv = document.querySelector(`[data-match-id="${matchId}"]`);
-        const teams = matchDiv.querySelectorAll('.team');
-        teams.forEach((t, idx) => {
-            t.classList.remove('winner', 'loser');
-            if (idx === teamIndex) t.classList.add('winner');
-            else t.classList.add('loser');
-        });
-        const [roundNum, matchNum] = matchId.substring(1).split('-m').map(Number);
-        if (roundNum < rounds.length - 1) {
-            const nextRound = roundNum + 1;
-            const nextMatch = Math.floor(matchNum / 2);
-            const nextMatchId = `r${nextRound}-m${nextMatch}`;
-            const position = matchNum % 2;
-            bracketData[nextMatchId].teams[position] = { name: team.name, seed: team.seed };
-            const nextMatchDiv = document.querySelector(`[data-match-id="${nextMatchId}"]`);
-            const nextTeam = nextMatchDiv.querySelector(`[data-team="${position}"]`);
-            const seedDisplay = team.seed ? team.seed : '-';
-            nextTeam.innerHTML = `<span class="seed">${seedDisplay}</span>${team.name}`;
-        } else {
-            showChampion(team.name);
-        }
-    }
+            // Advance to next round
+            const [roundNum, matchNum] = matchId.substring(1).split('-m').map(Number);
+            
+            if (roundNum < rounds.length - 1) {
+                const nextRound = roundNum + 1;
+                const nextMatch = Math.floor(matchNum / 2);
+                const nextMatchId = `r${nextRound}-m${nextMatch}`;
+                const position = matchNum % 2;
 
-    function showChampion(name) {
-        document.getElementById('championName').textContent = name;
-        document.getElementById('championDisplay').classList.add('show');
-    }
+                // Update next match data
+                bracketData[nextMatchId].teams[position] = {
+                    name: team.name,
+                    seed: team.seed
+                };
 
-    function highlightPlayer(name) {
-        if (name === 'BYE' || name === 'TBD') return;
-        document.querySelectorAll('.team').forEach(team => {
-            const seedElement = team.querySelector('.seed');
-            if (seedElement) {
-                const fullText = team.textContent.trim();
-                const seedText = seedElement.textContent.trim();
-                const teamName = fullText.substring(seedText.length).trim();
-                if (teamName === name) team.classList.add('highlighted');
+                // Update next match UI
+                const nextMatchDiv = document.querySelector(`[data-match-id="${nextMatchId}"]`);
+                const nextTeam = nextMatchDiv.querySelector(`[data-team="${position}"]`);
+                const seedDisplay = team.seed ? team.seed : '-';
+                nextTeam.innerHTML = `<span class="seed">${seedDisplay}</span>${team.name}`;
+            } else {
+                // Champion!
+                showChampion(team.name);
             }
-        });
-    }
+        }
 
-    function clearHighlights() {
-        document.querySelectorAll('.team').forEach(team => {
-            team.classList.remove('highlighted');
-        });
-    }
+        function showChampion(name) {
+            document.getElementById('championName').textContent = name;
+            document.getElementById('championDisplay').classList.add('show');
+        }
 
-    function resetBracket() {
-        document.getElementById('championDisplay').classList.remove('show');
+        function highlightPlayer(name) {
+            document.querySelectorAll('.team').forEach(team => {
+                const seedElement = team.querySelector('.seed');
+                if (seedElement) {
+                    const fullText = team.textContent.trim();
+                    const seedText = seedElement.textContent.trim();
+                    const teamName = fullText.substring(seedText.length).trim();
+                    if (teamName === name) {  // Exact match only
+                        team.classList.add('highlighted');
+                    }
+                }
+            });
+        }
+
+        function clearHighlights() {
+            document.querySelectorAll('.team').forEach(team => {
+                team.classList.remove('highlighted');
+            });
+        }
+
+        function resetBracket() {
+            document.getElementById('championDisplay').classList.remove('show');
+            initializeBracket();
+        }
+
+        function exportBracket() {
+            const data = {
+                players: players,
+                bracket: bracketData,
+                timestamp: new Date().toISOString()
+            };
+
+            const blob = new Blob([JSON.stringify(data, null, 2)], {type: 'application/json'});
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'tournament-bracket.json';
+            a.click();
+            URL.revokeObjectURL(url);
+        }
+
+        // Initialize
         initializeBracket();
-        // AUTO-ZOOM REMOVED FROM HERE
-    }
-
-    function exportBracket() {
-        const data = { players: players, bracket: bracketData, timestamp: new Date().toISOString() };
-        const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = 'tournament-bracket.json';
-        a.click();
-        URL.revokeObjectURL(url);
-    }
-    
-    // --- INITIALIZE THE BRACKET ON PAGE LOAD ---
-    initializeBracket();
-    // AUTO-ZOOM REMOVED FROM HERE
-</script>
-
+    </script>
 </body>
 </html>
