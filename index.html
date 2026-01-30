@@ -370,6 +370,65 @@
         .team .seed {
             display: none;
         }
+        /* ================================================= */
+/* --- BRACKET CONNECTOR LINES --- */
+/* ================================================= */
+
+/* This is the base style for all line elements. */
+.matchup::before, .matchup::after {
+    content: '';
+    position: absolute;
+    background-color: #a9a9a9; /* A medium grey for the lines */
+    z-index: -1; /* This places the lines BEHIND the team name boxes */
+}
+
+/* HORIZONTAL lines that come out of each matchup */
+.matchup::after {
+    top: 50%; /* Center vertically */
+    height: 2px; /* Line thickness */
+    width: 20px; /* Line length */
+}
+
+/* VERTICAL lines that connect pairs of matchups.
+   We only need to draw one long line from the top matchup of each pair. */
+.round .matchup:nth-of-type(2n-1)::before {
+    top: 50%;
+    width: 2px; /* Line thickness */
+    /* The height is set for each round below */
+}
+
+/* --- Positioning for the LEFT side of the bracket --- */
+#left-side .matchup::after {
+    left: 100%; /* Start the line at the right edge of the matchup */
+}
+#left-side .round .matchup:nth-of-type(2n-1)::before {
+    left: calc(100% + 20px); /* Align the vertical line with the end of the horizontal one */
+}
+
+/* --- Positioning for the RIGHT side of the bracket --- */
+#right-side .matchup::after {
+    right: 100%; /* Start the line at the left edge of the matchup */
+}
+#right-side .round .matchup:nth-of-type(2n-1)::before {
+    right: calc(100% + 20px); /* Align the vertical line with the end of the horizontal one */
+}
+
+/* --- DYNAMIC HEIGHTS for the vertical connectors --- */
+/* This is the key to correct alignment. It calculates height based on matchup margins. */
+.round-1 .matchup:nth-of-type(2n-1)::before { height: calc(100% + 30px); }
+.round-2 .matchup:nth-of-type(2n-1)::before { height: calc(100% + 110px); }
+.round-3 .matchup:nth-of-type(2n-1)::before { height: calc(100% + 300px); }
+
+/* The regional final matchup (round 4) doesn't need a vertical connector */
+.round-4 .matchup::before {
+    display: none;
+}
+
+/* The Final Four also does not need auto-generated lines */
+.final-four .matchup::before,
+.final-four .matchup::after {
+    display: none;
+}
 </style>
 </head>
 <body>
