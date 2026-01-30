@@ -527,6 +527,13 @@
                 // Right side round (reversed order for visual symmetry)
                 const rightRoundDiv = createRound(round, roundIndex, round.matches / 2, round.matches / 2);
                 rightHalf.appendChild(rightRoundDiv);
+
+            
+            // Run after layout paints so sizes are accurate
+            requestAnimationFrame(fitBracketOnLoad);
+            // (Optional) also after window load to account for webfont metrics:
+            // window.addEventListener('load', fitBracketOnLoad);
+
             }
 
             // Create finals in the middle
@@ -742,6 +749,30 @@
 
         // Initialize
         initializeBracket();
+        
+// Fit the bracket into the scroll area (one-time on load)
+function fitBracketOnLoad() {
+  const scrollEl   = document.getElementById('bracketScroll');
+  const container  = document.getElementById('bracketContainer');
+
+  // Base content size (unzoomed layout dimensions)
+  const contentW = container.scrollWidth;
+  const contentH = container.scrollHeight;
+
+  // Available viewport inside the scroll area
+  const viewW = scrollEl.clientWidth;
+  const viewH = scrollEl.clientHeight;
+
+  // Compute the zoom that fits both width and height
+  const fitZoom = Math.min(viewW / contentW, viewH / contentH);
+
+  // Respect your existing zoom bounds
+  zoomLevel = Math.max(0.3, Math.min(fitZoom, 2));
+
+  // Apply zoom + update the label (your existing function)
+  updateZoom();
+}
+
     </script>
 </body>
 </html>
