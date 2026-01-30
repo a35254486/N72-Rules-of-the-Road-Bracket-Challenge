@@ -1,0 +1,742 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rules of the Road March Madness</title>
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;600;700&family=Roboto+Condensed:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #003B4F;
+            --accent: #E8B00F;
+            --bg: #FFFFFF;
+            --light-gray: #F5F5F5;
+            --border: #E0E0E0;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Roboto Condensed', sans-serif;
+            background: var(--light-gray);
+            min-height: 100vh;
+            padding: 2rem 1rem;
+        }
+
+        .container {
+            max-width: 100%;
+            margin: 0 auto;
+            background: var(--bg);
+            border-radius: 10px;
+            box-shadow: 0 4px 20px rgba(0, 59, 79, 0.15);
+            padding: 2rem;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        h1 {
+            font-family: 'Oswald', sans-serif;
+            font-size: 4.0rem;
+            color: var(--primary);
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .subtitle {
+            font-size: 2.5rem;
+            color: var(--primary);
+            font-weight: 700;
+        }
+
+        .controls {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .zoom-controls {
+            display: flex;
+            gap: 0.5rem;
+            align-items: center;
+        }
+
+        .zoom-controls span {
+            font-weight: 600;
+            color: var(--primary);
+            min-width: 60px;
+            text-align: center;
+        }
+
+        button {
+            font-family: 'Roboto Condensed', sans-serif;
+            font-weight: 700;
+            font-size: 0.95rem;
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #005266;
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            background: var(--accent);
+            color: var(--primary);
+        }
+
+        .btn-secondary:hover {
+            background: #D4A20D;
+            transform: translateY(-2px);
+        }
+
+        .btn-accent {
+            background: white;
+            color: var(--primary);
+            border: 2px solid var(--primary);
+        }
+
+        .btn-accent:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        .bracket-scroll {
+            overflow: auto;
+            padding: 2rem 0;
+            position: relative;
+        }
+
+        .bracket-container {
+            transform-origin: top center;
+            transition: transform 0.2s ease;
+            display: inline-block;
+            min-width: 100%;
+        }
+
+        .bracket {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 60px;
+            min-width: max-content;
+        }
+
+        .bracket-half {
+            display: flex;
+            gap: 60px;
+        }
+
+        .bracket-half.left {
+            flex-direction: row;
+        }
+
+        .bracket-half.right {
+            flex-direction: row-reverse;
+        }
+
+        .finals-column {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .round {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-around;
+        }
+
+        .round-header {
+            font-family: 'Oswald', sans-serif;
+            font-size: 1.3rem;
+            color: var(--primary);
+            text-align: center;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            letter-spacing: 1px;
+        }
+
+        .round-matches {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-around;
+            flex: 1;
+        }
+
+        .match {
+            position: relative;
+            margin: 10px 0;
+        }
+
+        .match-line {
+            position: relative;
+        }
+
+        .team {
+            background: white;
+            border: 2px solid var(--border);
+            padding: 10px 15px;
+            min-width: 200px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            position: relative;
+            font-weight: 600;
+            font-size: 0.95rem;
+        }
+
+        .team:first-child {
+            border-bottom: 1px solid var(--border);
+            border-radius: 4px 4px 0 0;
+        }
+
+        .team:last-child {
+            border-top: 1px solid var(--border);
+            border-radius: 0 0 4px 4px;
+        }
+
+        .team:hover {
+            border-color: var(--accent);
+            background: #FFFEF5;
+            transform: translateX(3px);
+        }
+
+        .team.winner {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+            font-weight: 700;
+        }
+
+        .team.loser {
+            background: var(--light-gray);
+            color: #999;
+            opacity: 0.6;
+        }
+
+        .team.highlighted {
+            background: var(--accent);
+            color: var(--primary);
+            border-color: var(--accent);
+            font-weight: 700;
+        }
+
+        .seed {
+            display: inline-block;
+            background: var(--accent);
+            color: var(--primary);
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-size: 0.75rem;
+            margin-right: 8px;
+            font-weight: 700;
+            min-width: 24px;
+            text-align: center;
+        }
+
+        .winner .seed {
+            background: var(--accent);
+            color: var(--primary);
+        }
+
+        /* Connector lines - horizontal from match */
+        .match::after {
+            content: '';
+            position: absolute;
+            left: 100%;
+            top: 50%;
+            width: 30px;
+            height: 2px;
+            background: var(--primary);
+        }
+
+        /* Vertical lines connecting pairs */
+        .match:nth-child(odd)::before {
+            content: '';
+            position: absolute;
+            left: calc(100% + 30px);
+            top: 50%;
+            width: 2px;
+            background: var(--primary);
+        }
+
+        .match:nth-child(even)::before {
+            content: '';
+            position: absolute;
+            left: calc(100% + 30px);
+            bottom: 50%;
+            width: 2px;
+            background: var(--primary);
+        }
+
+        /* Don't show connectors on the last round */
+        .round:last-child .match::after,
+        .round:last-child .match::before {
+            display: none;
+        }
+
+        /* Specific heights for vertical connectors by round */
+        .round1 .match:nth-child(odd)::before { height: 58px; }
+        .round1 .match:nth-child(even)::before { height: 58px; }
+        
+        .round2 .match:nth-child(odd)::before { height: 146px; }
+        .round2 .match:nth-child(even)::before { height: 146px; }
+        
+        .round3 .match:nth-child(odd)::before { height: 322px; }
+        .round3 .match:nth-child(even)::before { height: 322px; }
+        
+        .round4 .match:nth-child(odd)::before { height: 674px; }
+        .round4 .match:nth-child(even)::before { height: 674px; }
+        
+        .round5 .match:nth-child(odd)::before { height: 1378px; }
+        .round5 .match:nth-child(even)::before { height: 1378px; }
+
+        /* Spacing between matches by round */
+        .round1 .match { margin: 10px 0; }
+        .round2 .match { margin: 54px 0; }
+        .round3 .match { margin: 142px 0; }
+        .round4 .match { margin: 318px 0; }
+        .round5 .match { margin: 670px 0; }
+        .round6 .match { margin: 0; }
+
+        .champion-display {
+            text-align: center;
+            margin-top: 3rem;
+            padding: 2rem;
+            background: var(--primary);
+            border: 4px solid var(--accent);
+            border-radius: 8px;
+            display: none;
+        }
+
+        .champion-display.show {
+            display: block;
+            animation: slideIn 0.5s ease;
+        }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .champion-display h2 {
+            font-family: 'Oswald', sans-serif;
+            font-size: 2.5rem;
+            color: var(--accent);
+            margin-bottom: 1rem;
+            font-weight: 700;
+            letter-spacing: 2px;
+        }
+
+        .champion-name {
+            font-size: 2rem;
+            font-weight: 700;
+            color: white;
+        }
+    
+/* === Right-side connectors face inward; hover/header align inward === */
+.bracket-half.right .match::after { left: auto; right: 100%; width: 30px; height: 2px; background: var(--primary); }
+.bracket-half.right .match:nth-child(odd)::before,
+.bracket-half.right .match:nth-child(even)::before { left: auto; right: calc(100% + 30px); width: 2px; background: var(--primary); }
+.bracket-half.left .team:hover { transform: translateX(3px); }
+.bracket-half.right .team:hover { transform: translateX(-3px); }
+.bracket-half.left .round-header { text-align: right; }
+.bracket-half.right .round-header { text-align: left; }
+.bracket-scroll { overscroll-behavior-inline: contain; scroll-padding-inline: 24px; }
+.bracket-container { min-width: auto; transform-origin: top left; }
+
+</style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Rules of the Road March Madness</h1>
+            <p class="subtitle">Who rules the Rules?</p>
+        </header>
+
+        <div class="controls">
+            <button class="btn-primary" onclick="resetBracket()">Reset Bracket</button>
+            <button class="btn-accent" onclick="exportBracket()">Export Data</button>
+            <div class="zoom-controls">
+                <button class="btn-secondary" onclick="zoomOut()">-</button>
+                <span id="zoomLevel">100%</span>
+                <button class="btn-secondary" onclick="zoomIn()">+</button>
+            </div>
+        </div>
+
+        <div class="bracket-scroll" id="bracketScroll">
+            <div class="bracket-container" id="bracketContainer">
+                <div class="bracket" id="bracket"></div>
+            </div>
+        </div>
+
+        <div class="champion-display" id="championDisplay">
+            <h2>🏆 N72 RULES OF THE ROAD CHAMPION 🏆</h2>
+            <div class="champion-name" id="championName"></div>
+        </div>
+    </div>
+
+    <script>
+        let players = [
+            // Region 1
+            "Vivian, Patrick",        // 1
+            "BYE",                     // 16
+            "Sodano, Jonathan",        // 8
+            "WARD, BRANDEN",           // 9
+            "Sweetman, Kevin",         // 5
+            "Lyons, William",          // 12
+            "WELCH, GEOFFREY",         // 4
+            "BYE",                     // 13
+            "HARLAND, DAVID",          // 6
+            "Beurket, Robert",         // 11
+            "MOORE, WYATT",            // 3
+            "BYE",                     // 14
+            "FONTAINE, BLAKE",         // 7
+            "SEVERSON, BENJAMIN",      // 10
+            "DAVID, KANE",             // 2
+            "BYE",                     // 15
+            // Region 2
+            "ENGEL, MEREDITH",         // 1
+            "BYE",                     // 16
+            "O'DONNELL, WALTER",       // 8
+            "Blythe, Jonathan",        // 9
+            "Moore, Katie",            // 5
+            "TREDO, GERALD",           // 12
+            "Christod, Gregory",       // 4
+            "BYE",                     // 13
+            "Kavall, Alexander",       // 6
+            "WHALEY, MONTRAYE",        // 11
+            "O'CONNELL, JOHN",         // 3
+            "BYE",                     // 14
+            "ASTROP, BRANNER",         // 7
+            "Holmes, Gregory",         // 10
+            "Olson, Theodore",         // 2
+            "BYE",                     // 15
+            // Region 3
+            "BRUNNER, KEVIN",          // 1
+            "BYE",                     // 16
+            "ZITT, JONATHON",          // 8
+            "ADDEO, JOCELYN",          // 9
+            "Parkhurst, David",        // 5
+            "STEADMAN, TIMOTHY",       // 12
+            "Chandler, Davis",         // 4
+            "BYE",                     // 13
+            "GRAY, KELLEN",            // 6
+            "PAPILI, ROBERT",          // 11
+            "Egbers, Alex",            // 3
+            "BYE",                     // 14
+            "McDonough, Leo",          // 7
+            "URBANO, DANIEL",          // 10
+            "Bradley, Seth",           // 2
+            "BYE",                     // 15
+            // Region 4
+            "Shanley, Michael",        // 1
+            "BYE",                     // 16
+            "KENNEDY, ANTHONY",        // 8
+            "JOHNSON, IAN",            // 9
+            "LAPOINTE, PHILIP",        // 5
+            "Chesnut, Michael",        // 12
+            "PTASIENSKI, GABRIEL",     // 4
+            "BYE",                     // 13
+            "McQuain, Alexander",      // 6
+            "VEHRS, JACOB",            // 11
+            "Carrillo, David",         // 3
+            "BYE",                     // 14
+            "Tommasello, Steven",      // 7
+            "Deforest, Benjamin",      // 10
+            "Hunter, Kathryn",         // 2
+            "BYE"                      // 15
+        ];
+
+        const rounds = [
+            { name: 'ROUND 1', matches: 32, class: 'round1' },
+            { name: 'ROUND 2', matches: 16, class: 'round2' },
+            { name: 'SWEET 16', matches: 8, class: 'round3' },
+            { name: 'ELITE 8', matches: 4, class: 'round4' },
+            { name: 'FINAL 4', matches: 2, class: 'round5' },
+            { name: 'CHAMPIONSHIP', matches: 1, class: 'round6' }
+        ];
+
+        let bracketData = {};
+        let zoomLevel = 1;
+
+        function zoomIn() {
+            zoomLevel = Math.min(zoomLevel + 0.1, 2);
+            updateZoom();
+        }
+
+        function zoomOut() {
+            zoomLevel = Math.max(zoomLevel - 0.1, 0.3);
+            updateZoom();
+        }
+
+        function updateZoom() {
+            const container = document.getElementById('bracketContainer');
+            container.style.zoom = zoomLevel;;
+            document.getElementById('zoomLevel').textContent = Math.round(zoomLevel * 100) + '%';
+        }
+
+        function initializeBracket() {
+            bracketData = {};
+            const bracket = document.getElementById('bracket');
+            bracket.innerHTML = '';
+
+            // Create left half (regions 1 and 2)
+            const leftHalf = document.createElement('div');
+            leftHalf.className = 'bracket-half left';
+
+            // Create right half (regions 3 and 4)
+            const rightHalf = document.createElement('div');
+            rightHalf.className = 'bracket-half right';
+
+            // Build rounds for each half
+            for (let roundIndex = 0; roundIndex < 5; roundIndex++) {
+                const round = rounds[roundIndex];
+                
+                // Left side round
+                const leftRoundDiv = createRound(round, roundIndex, 0, round.matches / 2);
+                leftHalf.appendChild(leftRoundDiv);
+                
+                // Right side round (reversed order for visual symmetry)
+                const rightRoundDiv = createRound(round, roundIndex, round.matches / 2, round.matches / 2);
+                rightHalf.appendChild(rightRoundDiv);
+            }
+
+            // Create finals in the middle
+            const finalsDiv = document.createElement('div');
+            finalsDiv.className = 'finals-column';
+            const finalsRound = createRound(rounds[5], 5, 0, 1);
+            finalsDiv.appendChild(finalsRound);
+
+            bracket.appendChild(leftHalf);
+            bracket.appendChild(finalsDiv);
+            bracket.appendChild(rightHalf);
+
+            attachClickHandlers();
+            attachHoverHandlers();
+        }
+
+        function createRound(round, roundIndex, startMatch, matchCount) {
+            const roundDiv = document.createElement('div');
+            roundDiv.className = `round ${round.class}`;
+            
+            const header = document.createElement('div');
+            header.className = 'round-header';
+            header.textContent = round.name;
+            roundDiv.appendChild(header);
+
+            const matchesDiv = document.createElement('div');
+            matchesDiv.className = 'round-matches';
+
+            for (let i = 0; i < matchCount; i++) {
+                const matchIndex = startMatch + i;
+                const matchId = `r${roundIndex}-m${matchIndex}`;
+                const matchDiv = document.createElement('div');
+                matchDiv.className = 'match';
+                matchDiv.dataset.matchId = matchId;
+
+                if (roundIndex === 0) {
+                    // First round - assign initial players
+                    const p1Index = matchIndex * 2;
+                    const p2Index = matchIndex * 2 + 1;
+                    
+                    // Tournament seeding pattern: 1v16, 8v9, 5v12, 4v13, 6v11, 3v14, 7v10, 2v15
+                    const seedPattern = [1, 16, 8, 9, 5, 12, 4, 13, 6, 11, 3, 14, 7, 10, 2, 15];
+                    const matchInRegion = matchIndex % 8;
+                    
+                    const seed1 = seedPattern[matchInRegion * 2];
+                    const seed2 = seedPattern[matchInRegion * 2 + 1];
+
+                    bracketData[matchId] = {
+                        teams: [
+                            { name: players[p1Index], seed: seed1 },
+                            { name: players[p2Index], seed: seed2 }
+                        ],
+                        winner: null
+                    };
+
+                    matchDiv.innerHTML = `
+                        <div class="match-line">
+                            <div class="team" data-match="${matchId}" data-team="0">
+                                <span class="seed">${seed1}</span>${players[p1Index]}
+                            </div>
+                            <div class="team" data-match="${matchId}" data-team="1">
+                                <span class="seed">${seed2}</span>${players[p2Index]}
+                            </div>
+                        </div>
+                    `;
+                } else {
+                    // Later rounds - TBD
+                    bracketData[matchId] = {
+                        teams: [
+                            { name: 'TBD', seed: null },
+                            { name: 'TBD', seed: null }
+                        ],
+                        winner: null
+                    };
+
+                    matchDiv.innerHTML = `
+                        <div class="match-line">
+                            <div class="team" data-match="${matchId}" data-team="0">
+                                <span class="seed">-</span>TBD
+                            </div>
+                            <div class="team" data-match="${matchId}" data-team="1">
+                                <span class="seed">-</span>TBD
+                            </div>
+                        </div>
+                    `;
+                }
+
+                matchesDiv.appendChild(matchDiv);
+            }
+
+            roundDiv.appendChild(matchesDiv);
+            return roundDiv;
+        }
+
+        function attachClickHandlers() {
+            document.querySelectorAll('.team').forEach(team => {
+                team.addEventListener('click', function() {
+                    const matchId = this.dataset.match;
+                    const teamIndex = parseInt(this.dataset.team);
+                    selectWinner(matchId, teamIndex);
+                });
+            });
+        }
+
+        function attachHoverHandlers() {
+            document.querySelectorAll('.team').forEach(team => {
+                team.addEventListener('mouseenter', function() {
+                    // Get just the name part (everything after the seed badge)
+                    const seedElement = this.querySelector('.seed');
+                    if (seedElement) {
+                        const fullText = this.textContent.trim();
+                        const seedText = seedElement.textContent.trim();
+                        const name = fullText.substring(seedText.length).trim();
+                        highlightPlayer(name);
+                    }
+                });
+                team.addEventListener('mouseleave', clearHighlights);
+            });
+        }
+
+        function selectWinner(matchId, teamIndex) {
+            const match = bracketData[matchId];
+            const team = match.teams[teamIndex];
+
+            if (team.name === 'TBD') return;
+
+            // Mark winner in data
+            match.winner = teamIndex;
+
+            // Update UI
+            const matchDiv = document.querySelector(`[data-match-id="${matchId}"]`);
+            const teams = matchDiv.querySelectorAll('.team');
+            teams.forEach((t, idx) => {
+                t.classList.remove('winner', 'loser');
+                if (idx === teamIndex) {
+                    t.classList.add('winner');
+                } else {
+                    t.classList.add('loser');
+                }
+            });
+
+            // Advance to next round
+            const [roundNum, matchNum] = matchId.substring(1).split('-m').map(Number);
+            
+            if (roundNum < rounds.length - 1) {
+                const nextRound = roundNum + 1;
+                const nextMatch = Math.floor(matchNum / 2);
+                const nextMatchId = `r${nextRound}-m${nextMatch}`;
+                const position = matchNum % 2;
+
+                // Update next match data
+                bracketData[nextMatchId].teams[position] = {
+                    name: team.name,
+                    seed: team.seed
+                };
+
+                // Update next match UI
+                const nextMatchDiv = document.querySelector(`[data-match-id="${nextMatchId}"]`);
+                const nextTeam = nextMatchDiv.querySelector(`[data-team="${position}"]`);
+                const seedDisplay = team.seed ? team.seed : '-';
+                nextTeam.innerHTML = `<span class="seed">${seedDisplay}</span>${team.name}`;
+            } else {
+                // Champion!
+                showChampion(team.name);
+            }
+        }
+
+        function showChampion(name) {
+            document.getElementById('championName').textContent = name;
+            document.getElementById('championDisplay').classList.add('show');
+        }
+
+        function highlightPlayer(name) {
+            document.querySelectorAll('.team').forEach(team => {
+                const seedElement = team.querySelector('.seed');
+                if (seedElement) {
+                    const fullText = team.textContent.trim();
+                    const seedText = seedElement.textContent.trim();
+                    const teamName = fullText.substring(seedText.length).trim();
+                    if (teamName === name) {  // Exact match only
+                        team.classList.add('highlighted');
+                    }
+                }
+            });
+        }
+
+        function clearHighlights() {
+            document.querySelectorAll('.team').forEach(team => {
+                team.classList.remove('highlighted');
+            });
+        }
+
+        function resetBracket() {
+            document.getElementById('championDisplay').classList.remove('show');
+            initializeBracket();
+        }
+
+        function exportBracket() {
+            const data = {
+                players: players,
+                bracket: bracketData,
+                timestamp: new Date().toISOString()
+            };
+
+            const blob = new Blob([JSON.stringify(data, null, 2)], {type: 'application/json'});
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'tournament-bracket.json';
+            a.click();
+            URL.revokeObjectURL(url);
+        }
+
+        // Initialize
+        initializeBracket();
+    </script>
+</body>
+</html>
