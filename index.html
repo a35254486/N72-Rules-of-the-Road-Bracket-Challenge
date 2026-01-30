@@ -207,345 +207,160 @@
         </div>
     </div>
 
-    <script>
-        let players = [
-            // Region 1
-            "Patrick Vivian",        // 1
-            "BYE",                     // 16
-            "Jonathan Sodano",        // 8
-            "Branden Ward",           // 9
-            "Kevin Sweetman",         // 5
-            "William Lyons",          // 12
-            "Geoffrey Welch",         // 4
-            "BYE",                     // 13
-            "David Harland",          // 6
-            "Robert Beurket",         // 11
-            "Wyatt Moore",            // 3
-            "BYE",                     // 14
-            "Blake Fontaine",         // 7
-            "Ben Severson",      // 10
-            "David Kane",             // 2
-            "BYE",                     // 15
-            // Region 2
-            "Meredith Engel",         // 1
-            "BYE",                     // 16
-            "Walt O'Donnell",       // 8
-            "Tanner Blythe",        // 9
-            "Katie Moore",            // 5
-            "Jerry Tredo",           // 12
-            "Gregory Christod",       // 4
-            "BYE",                     // 13
-            "Alexander Kavall",       // 6
-            "Montraye Whaley",        // 11
-            "John O'Connell",         // 3
-            "BYE",                     // 14
-            "Branner Astrop",         // 7
-            "Gregory Holmes",         // 10
-            "Ted Olson",         // 2
-            "BYE",                     // 15
-            // Region 3
-            "Kevin Brunner",          // 1
-            "BYE",                     // 16
-            "Jonathon Zitt",          // 8
-            "Jocelyn Addeo",          // 9
-            "David Parkhurst",        // 5
-            "Tim Steadman",       // 12
-            "Davis Chandler",         // 4
-            "BYE",                     // 13
-            "Kellen Gray",            // 6
-            "Robert Papili",          // 11
-            "Alex Egbers",            // 3
-            "BYE",                     // 14
-            "Lee McDonough",          // 7
-            "Daniel Urbano",          // 10
-            "Seth Bradley",           // 2
-            "BYE",                     // 15
-            // Region 4
-            "Michael Shanley",        // 1
-            "BYE",                     // 16
-            "Tony Kennedy",        // 8
-            "Ian Johnson",            // 9
-            "Phil Lapointe",        // 5
-            "Michael Chesnut",        // 12
-            "Gabriel Ptasienski",     // 4
-            "BYE",                     // 13
-            "Alexander McQuain",      // 6
-            "Jacob Vehrs",            // 11
-            "David Carrillo",         // 3
-            "BYE",                     // 14
-            "Steven Tommasello",      // 7
-            "Benjamin Deforest",      // 10
-            "Kat Hunter",         // 2
-            "BYE"                      // 15
-        ];
+<script>
+    let players = [
+        "Patrick Vivian", "BYE", "Jonathan Sodano", "Branden Ward", "Kevin Sweetman", "William Lyons", "Geoffrey Welch", "BYE",
+        "David Harland", "Robert Beurket", "Wyatt Moore", "BYE", "Blake Fontaine", "Ben Severson", "David Kane", "BYE",
+        "Meredith Engel", "BYE", "Walt O'Donnell", "Tanner Blythe", "Katie Moore", "Jerry Tredo", "Gregory Christod", "BYE",
+        "Alexander Kavall", "Montraye Whaley", "John O'Connell", "BYE", "Branner Astrop", "Gregory Holmes", "Ted Olson", "BYE",
+        "Kevin Brunner", "BYE", "Jonathon Zitt", "Jocelyn Addeo", "David Parkhurst", "Tim Steadman", "Davis Chandler", "BYE",
+        "Kellen Gray", "Robert Papili", "Alex Egbers", "BYE", "Lee McDonough", "Daniel Urbano", "Seth Bradley", "BYE",
+        "Michael Shanley", "BYE", "Tony Kennedy", "Ian Johnson", "Phil Lapointe", "Michael Chesnut", "Gabriel Ptasienski", "BYE",
+        "Alexander McQuain", "Jacob Vehrs", "David Carrillo", "BYE", "Steven Tommasello", "Benjamin Deforest", "Kat Hunter", "BYE"
+    ];
 
-        const rounds = [
-            { name: 'FIRST ROUND', matches: 32, class: 'round1' },
-            { name: 'SECOND ROUND', matches: 16, class: 'round2' },
-            { name: 'SWEET 16', matches: 8, class: 'round3' },
-            { name: 'ELITE 8', matches: 4, class: 'round4' },
-            { name: 'FINAL 4', matches: 2, class: 'round5' },
-            { name: 'CHAMPIONSHIP', matches: 1, class: 'round6' }
-        ];
+    const rounds = [
+        { name: 'FIRST ROUND', matches: 32, class: 'round1' }, { name: 'SECOND ROUND', matches: 16, class: 'round2' },
+        { name: 'SWEET 16', matches: 8, class: 'round3' }, { name: 'ELITE 8', matches: 4, class: 'round4' },
+        { name: 'FINAL 4', matches: 2, class: 'round5' }, { name: 'CHAMPIONSHIP', matches: 1, class: 'round6' }
+    ];
 
-        let bracketData = {};
-        let zoomLevel = 1;
+    let bracketData = {};
+    let baseZoom = 1.0;
+    let manualZoom = 1.0;
 
-        function zoomIn() {
-            zoomLevel = Math.min(zoomLevel + 0.1, 2);
-            updateZoom();
+    function zoomIn() {
+        manualZoom = Math.min(manualZoom + 0.1, 2);
+        updateZoom();
+    }
+
+    function zoomOut() {
+        manualZoom = Math.max(manualZoom - 0.1, 0.5);
+        updateZoom();
+    }
+
+    function updateZoom() {
+        const container = document.getElementById('bracketContainer');
+        container.style.zoom = baseZoom * manualZoom;
+        document.getElementById('zoomLevel').textContent = Math.round(manualZoom * 100) + '%';
+    }
+
+    function initializeBracket() {
+        bracketData = {};
+        const bracket = document.getElementById('bracket');
+        bracket.innerHTML = '';
+        const leftHalf = document.createElement('div');
+        leftHalf.className = 'bracket-half left';
+        const rightHalf = document.createElement('div');
+        rightHalf.className = 'bracket-half right';
+        for (let roundIndex = 0; roundIndex < 5; roundIndex++) {
+            const round = rounds[roundIndex];
+            leftHalf.appendChild(createRound(round, roundIndex, 0, round.matches / 2));
+            rightHalf.appendChild(createRound(round, roundIndex, round.matches / 2, round.matches / 2));
         }
+        const finalsDiv = document.createElement('div');
+        finalsDiv.className = 'finals-column';
+        finalsDiv.appendChild(createRound(rounds[5], 5, 0, 1));
+        bracket.appendChild(leftHalf);
+        bracket.appendChild(finalsDiv);
+        bracket.appendChild(rightHalf);
+        attachClickHandlers();
+        attachHoverHandlers();
+    }
 
-        function zoomOut() {
-            zoomLevel = Math.max(zoomLevel - 0.1, 0.3);
-            updateZoom();
-        }
-
-        function updateZoom() {
-            const container = document.getElementById('bracketContainer');
-            container.style.zoom = zoomLevel;;
-            document.getElementById('zoomLevel').textContent = Math.round(zoomLevel * 100) + '%';
-        }
-
-        function initializeBracket() {
-            bracketData = {};
-            const bracket = document.getElementById('bracket');
-            bracket.innerHTML = '';
-
-            // Create left half (regions 1 and 2)
-            const leftHalf = document.createElement('div');
-            leftHalf.className = 'bracket-half left';
-
-            // Create right half (regions 3 and 4)
-            const rightHalf = document.createElement('div');
-            rightHalf.className = 'bracket-half right';
-
-            // Build rounds for each half
-            for (let roundIndex = 0; roundIndex < 5; roundIndex++) {
-                const round = rounds[roundIndex];
-                
-                // Left side round
-                const leftRoundDiv = createRound(round, roundIndex, 0, round.matches / 2);
-                leftHalf.appendChild(leftRoundDiv);
-                
-                // Right side round (reversed order for visual symmetry)
-                const rightRoundDiv = createRound(round, roundIndex, round.matches / 2, round.matches / 2);
-                rightHalf.appendChild(rightRoundDiv);
-            }
-
-            // Create finals in the middle
-            const finalsDiv = document.createElement('div');
-            finalsDiv.className = 'finals-column';
-            const finalsRound = createRound(rounds[5], 5, 0, 1);
-            finalsDiv.appendChild(finalsRound);
-
-            bracket.appendChild(leftHalf);
-            bracket.appendChild(finalsDiv);
-            bracket.appendChild(rightHalf);
-
-            attachClickHandlers();
-            attachHoverHandlers();
-        }
-
-        function createRound(round, roundIndex, startMatch, matchCount) {
-            const roundDiv = document.createElement('div');
-            roundDiv.className = `round ${round.class}`;
-            
-            const header = document.createElement('div');
-            header.className = 'round-header';
-            header.textContent = round.name;
-            roundDiv.appendChild(header);
-
-            const matchesDiv = document.createElement('div');
-            matchesDiv.className = 'round-matches';
-
-            for (let i = 0; i < matchCount; i++) {
-                const matchIndex = startMatch + i;
-                const matchId = `r${roundIndex}-m${matchIndex}`;
-                const matchDiv = document.createElement('div');
-                matchDiv.className = 'match';
-                matchDiv.dataset.matchId = matchId;
-
-                if (roundIndex === 0) {
-                    // First round - assign initial players
-                    const p1Index = matchIndex * 2;
-                    const p2Index = matchIndex * 2 + 1;
-                    
-                    // Tournament seeding pattern: 1v16, 8v9, 5v12, 4v13, 6v11, 3v14, 7v10, 2v15
-                    const seedPattern = [1, 16, 8, 9, 5, 12, 4, 13, 6, 11, 3, 14, 7, 10, 2, 15];
-                    const matchInRegion = matchIndex % 8;
-                    
-                    const seed1 = seedPattern[matchInRegion * 2];
-                    const seed2 = seedPattern[matchInRegion * 2 + 1];
-
-                    bracketData[matchId] = {
-                        teams: [
-                            { name: players[p1Index], seed: seed1 },
-                            { name: players[p2Index], seed: seed2 }
-                        ],
-                        winner: null
-                    };
-
-                    matchDiv.innerHTML = `
-                        <div class="match-line">
-                            <div class="team" data-match="${matchId}" data-team="0">
-                                <span class="seed">${seed1}</span>${players[p1Index]}
-                            </div>
-                            <div class="team" data-match="${matchId}" data-team="1">
-                                <span class="seed">${seed2}</span>${players[p2Index]}
-                            </div>
-                        </div>
-                    `;
-                } else {
-                    // Later rounds - TBD
-                    bracketData[matchId] = {
-                        teams: [
-                            { name: 'TBD', seed: null },
-                            { name: 'TBD', seed: null }
-                        ],
-                        winner: null
-                    };
-
-                    matchDiv.innerHTML = `
-                        <div class="match-line">
-                            <div class="team" data-match="${matchId}" data-team="0">
-                                <span class="seed">-</span>TBD
-                            </div>
-                            <div class="team" data-match="${matchId}" data-team="1">
-                                <span class="seed">-</span>TBD
-                            </div>
-                        </div>
-                    `;
-                }
-
-                matchesDiv.appendChild(matchDiv);
-            }
-
-            roundDiv.appendChild(matchesDiv);
-            return roundDiv;
-        }
-
-        function attachClickHandlers() {
-            document.querySelectorAll('.team').forEach(team => {
-                team.addEventListener('click', function() {
-                    const matchId = this.dataset.match;
-                    const teamIndex = parseInt(this.dataset.team);
-                    selectWinner(matchId, teamIndex);
-                });
-            });
-        }
-
-        function attachHoverHandlers() {
-            document.querySelectorAll('.team').forEach(team => {
-                team.addEventListener('mouseenter', function() {
-                    // Get just the name part (everything after the seed badge)
-                    const seedElement = this.querySelector('.seed');
-                    if (seedElement) {
-                        const fullText = this.textContent.trim();
-                        const seedText = seedElement.textContent.trim();
-                        const name = fullText.substring(seedText.length).trim();
-                        highlightPlayer(name);
-                    }
-                });
-                team.addEventListener('mouseleave', clearHighlights);
-            });
-        }
-
-        function selectWinner(matchId, teamIndex) {
-            const match = bracketData[matchId];
-            const team = match.teams[teamIndex];
-
-            if (team.name === 'TBD') return;
-
-            // Mark winner in data
-            match.winner = teamIndex;
-
-            // Update UI
-            const matchDiv = document.querySelector(`[data-match-id="${matchId}"]`);
-            const teams = matchDiv.querySelectorAll('.team');
-            teams.forEach((t, idx) => {
-                t.classList.remove('winner', 'loser');
-                if (idx === teamIndex) {
-                    t.classList.add('winner');
-                } else {
-                    t.classList.add('loser');
-                }
-            });
-
-            // Advance to next round
-            const [roundNum, matchNum] = matchId.substring(1).split('-m').map(Number);
-            
-            if (roundNum < rounds.length - 1) {
-                const nextRound = roundNum + 1;
-                const nextMatch = Math.floor(matchNum / 2);
-                const nextMatchId = `r${nextRound}-m${nextMatch}`;
-                const position = matchNum % 2;
-
-                // Update next match data
-                bracketData[nextMatchId].teams[position] = {
-                    name: team.name,
-                    seed: team.seed
-                };
-
-                // Update next match UI
-                const nextMatchDiv = document.querySelector(`[data-match-id="${nextMatchId}"]`);
-                const nextTeam = nextMatchDiv.querySelector(`[data-team="${position}"]`);
-                const seedDisplay = team.seed ? team.seed : '-';
-                nextTeam.innerHTML = `<span class="seed">${seedDisplay}</span>${team.name}`;
+    function createRound(round, roundIndex, startMatch, matchCount) {
+        const roundDiv = document.createElement('div');
+        roundDiv.className = `round ${round.class}`;
+        const header = document.createElement('div');
+        header.className = 'round-header';
+        header.textContent = round.name;
+        roundDiv.appendChild(header);
+        const matchesDiv = document.createElement('div');
+        matchesDiv.className = 'round-matches';
+        for (let i = 0; i < matchCount; i++) {
+            const matchIndex = startMatch + i;
+            const matchId = `r${roundIndex}-m${matchIndex}`;
+            const matchDiv = document.createElement('div');
+            matchDiv.className = 'match';
+            matchDiv.dataset.matchId = matchId;
+            if (roundIndex === 0) {
+                const p1Index = matchIndex * 2, p2Index = matchIndex * 2 + 1;
+                const seedPattern = [1, 16, 8, 9, 5, 12, 4, 13, 6, 11, 3, 14, 7, 10, 2, 15];
+                const seed1 = seedPattern[(matchIndex % 8) * 2], seed2 = seedPattern[(matchIndex % 8) * 2 + 1];
+                bracketData[matchId] = { teams: [{ name: players[p1Index], seed: seed1 }, { name: players[p2Index], seed: seed2 }], winner: null };
+                matchDiv.innerHTML = `<div class="match-line"><div class="team" data-match="${matchId}" data-team="0"><span class="seed">${seed1}</span>${players[p1Index]}</div><div class="team" data-match="${matchId}" data-team="1"><span class="seed">${seed2}</span>${players[p2Index]}</div></div>`;
             } else {
-                // Champion!
-                showChampion(team.name);
+                bracketData[matchId] = { teams: [{ name: 'TBD', seed: null }, { name: 'TBD', seed: null }], winner: null };
+                matchDiv.innerHTML = `<div class="match-line"><div class="team" data-match="${matchId}" data-team="0"><span class="seed">-</span>TBD</div><div class="team" data-match="${matchId}" data-team="1"><span class="seed">-</span>TBD</div></div>`;
             }
+            matchesDiv.appendChild(matchDiv);
         }
+        roundDiv.appendChild(matchesDiv);
+        return roundDiv;
+    }
 
-        function showChampion(name) {
-            document.getElementById('championName').textContent = name;
-            document.getElementById('championDisplay').classList.add('show');
-        }
+    function attachClickHandlers() { document.querySelectorAll('.team').forEach(team => team.addEventListener('click', function() { selectWinner(this.dataset.match, parseInt(this.dataset.team)); })); }
+    function attachHoverHandlers() { document.querySelectorAll('.team').forEach(team => { team.addEventListener('mouseenter', function() { const seedElement = this.querySelector('.seed'); if (seedElement) { highlightPlayer(this.textContent.trim().substring(seedElement.textContent.trim().length).trim()); } }); team.addEventListener('mouseleave', clearHighlights); }); }
 
-        function highlightPlayer(name) {
-            document.querySelectorAll('.team').forEach(team => {
-                const seedElement = team.querySelector('.seed');
-                if (seedElement) {
-                    const fullText = team.textContent.trim();
-                    const seedText = seedElement.textContent.trim();
-                    const teamName = fullText.substring(seedText.length).trim();
-                    if (teamName === name) {  // Exact match only
-                        team.classList.add('highlighted');
-                    }
-                }
-            });
-        }
+    function selectWinner(matchId, teamIndex) {
+        const match = bracketData[matchId];
+        const team = match.teams[teamIndex];
+        if (team.name === 'TBD' || team.name === 'BYE') return;
+        match.winner = teamIndex;
+        const matchDiv = document.querySelector(`[data-match-id="${matchId}"]`);
+        matchDiv.querySelectorAll('.team').forEach((t, idx) => { t.classList.remove('winner', 'loser'); if (idx === teamIndex) t.classList.add('winner'); else t.classList.add('loser'); });
+        const [roundNum, matchNum] = matchId.substring(1).split('-m').map(Number);
+        if (roundNum < rounds.length - 1) {
+            const nextMatchId = `r${roundNum + 1}-m${Math.floor(matchNum / 2)}`;
+            const position = matchNum % 2;
+            bracketData[nextMatchId].teams[position] = { name: team.name, seed: team.seed };
+            const nextTeam = document.querySelector(`[data-match-id="${nextMatchId}"] [data-team="${position}"]`);
+            nextTeam.innerHTML = `<span class="seed">${team.seed || '-'}</span>${team.name}`;
+        } else { showChampion(team.name); }
+    }
 
-        function clearHighlights() {
-            document.querySelectorAll('.team').forEach(team => {
-                team.classList.remove('highlighted');
-            });
-        }
+    function showChampion(name) { document.getElementById('championName').textContent = name; document.getElementById('championDisplay').classList.add('show'); }
+    function highlightPlayer(name) { if (name === 'BYE' || name === 'TBD') return; document.querySelectorAll('.team').forEach(team => { const teamName = team.textContent.trim().substring(team.querySelector('.seed').textContent.trim().length).trim(); if (teamName === name) team.classList.add('highlighted'); }); }
+    function clearHighlights() { document.querySelectorAll('.team').forEach(team => team.classList.remove('highlighted')); }
 
-        function resetBracket() {
-            document.getElementById('championDisplay').classList.remove('show');
-            initializeBracket();
-        }
-
-        function exportBracket() {
-            const data = {
-                players: players,
-                bracket: bracketData,
-                timestamp: new Date().toISOString()
-            };
-
-            const blob = new Blob([JSON.stringify(data, null, 2)], {type: 'application/json'});
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = 'tournament-bracket.json';
-            a.click();
-            URL.revokeObjectURL(url);
-        }
-
-        // Initialize
+    function resetBracket() {
+        document.getElementById('championDisplay').classList.remove('show');
         initializeBracket();
-    </script>
+        autoZoomToFit();
+    }
+
+    function exportBracket() {
+        const data = { players, bracket: bracketData, timestamp: new Date().toISOString() };
+        const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'tournament-bracket.json';
+        a.click();
+        URL.revokeObjectURL(url);
+    }
+    
+    function autoZoomToFit() {
+        setTimeout(() => {
+            const scrollContainer = document.getElementById('bracketScroll');
+            const bracketElement = document.getElementById('bracket');
+            if (!scrollContainer || !bracketElement) return;
+            const containerWidth = scrollContainer.clientWidth;
+            const bracketWidth = bracketElement.scrollWidth;
+            const horizontalPadding = 40;
+            if (bracketWidth > containerWidth) {
+                baseZoom = (containerWidth - horizontalPadding) / bracketWidth;
+            } else {
+                baseZoom = 1;
+            }
+            manualZoom = 1.0;
+            updateZoom();
+        }, 150);
+    }
+
+    initializeBracket();
+    autoZoomToFit();
+</script>
+
 </body>
 </html>
