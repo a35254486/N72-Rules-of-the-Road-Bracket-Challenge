@@ -8,7 +8,7 @@
   />
   <title>Rules of the Road March Madness</title>
   <link
-    href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;600;700&family=Roboto+Condensed:wght@400;
+   onts.googleapis.com/css2?family=Oswald:wght@400;600;700&family=Roboto+Condensed:wght@400;700&display=swap
   <style>
     :root {
       --primary: #003b4f;
@@ -130,17 +130,14 @@
       overflow: auto;
       padding: 1rem 0;
       position: relative;
-      /* small buffer + reduced overscroll */
       overscroll-behavior-inline: contain;
       scroll-padding-inline: 24px;
     }
 
     .bracket-container {
-      /* NOTE: visuals unchanged; we only control zoom on this element */
       transform-origin: top left; /* safe default for layout zoom */
       display: inline-block;
       min-width: auto;
-      transition: transform 0.2s ease; /* harmless even with layout zoom */
     }
 
     .bracket {
@@ -468,73 +465,25 @@
   <script>
     let players = [
       // Region 1
-      "Patrick Vivian", // 1
-      "BYE", // 16
-      "Jonathan Sodano", // 8
-      "Branden Ward", // 9
-      "Kevin Sweetman", // 5
-      "William Lyons", // 12
-      "Geoffrey Welch", // 4
-      "BYE", // 13
-      "David Harland", // 6
-      "Robert Beurket", // 11
-      "Wyatt Moore", // 3
-      "BYE", // 14
-      "Blake Fontaine", // 7
-      "Ben Severson", // 10
-      "David Kane", // 2
-      "BYE", // 15
+      "Patrick Vivian", "BYE", "Jonathan Sodano", "Branden Ward",
+      "Kevin Sweetman", "William Lyons", "Geoffrey Welch", "BYE",
+      "David Harland", "Robert Beurket", "Wyatt Moore", "BYE",
+      "Blake Fontaine", "Ben Severson", "David Kane", "BYE",
       // Region 2
-      "Meredith Engel", // 1
-      "BYE", // 16
-      "Walt O'Donnell", // 8
-      "Tanner Blythe", // 9
-      "Katie Moore", // 5
-      "Jerry Tredo", // 12
-      "Gregory Christod", // 4
-      "BYE", // 13
-      "Alexander Kavall", // 6
-      "Montraye Whaley", // 11
-      "John O'Connell", // 3
-      "BYE", // 14
-      "Branner Astrop", // 7
-      "Gregory Holmes", // 10
-      "Ted Olson", // 2
-      "BYE", // 15
+      "Meredith Engel", "BYE", "Walt O'Donnell", "Tanner Blythe",
+      "Katie Moore", "Jerry Tredo", "Gregory Christod", "BYE",
+      "Alexander Kavall", "Montraye Whaley", "John O'Connell", "BYE",
+      "Branner Astrop", "Gregory Holmes", "Ted Olson", "BYE",
       // Region 3
-      "Kevin Brunner", // 1
-      "BYE", // 16
-      "Jonathon Zitt", // 8
-      "Jocelyn Addeo", // 9
-      "David Parkhurst", // 5
-      "Tim Steadman", // 12
-      "Davis Chandler", // 4
-      "BYE", // 13
-      "Kellen Gray", // 6
-      "Robert Papili", // 11
-      "Alex Egbers", // 3
-      "BYE", // 14
-      "Lee McDonough", // 7
-      "Daniel Urbano", // 10
-      "Seth Bradley", // 2
-      "BYE", // 15
+      "Kevin Brunner", "BYE", "Jonathon Zitt", "Jocelyn Addeo",
+      "David Parkhurst", "Tim Steadman", "Davis Chandler", "BYE",
+      "Kellen Gray", "Robert Papili", "Alex Egbers", "BYE",
+      "Lee McDonough", "Daniel Urbano", "Seth Bradley", "BYE",
       // Region 4
-      "Michael Shanley", // 1
-      "BYE", // 16
-      "Tony Kennedy", // 8
-      "Ian Johnson", // 9
-      "Phil Lapointe", // 5
-      "Michael Chesnut", // 12
-      "Gabriel Ptasienski", // 4
-      "BYE", // 13
-      "Alexander McQuain", // 6
-      "Jacob Vehrs", // 11
-      "David Carrillo", // 3
-      "BYE", // 14
-      "Steven Tommasello", // 7
-      "Benjamin Deforest", // 10
-      "Kat Hunter", // 2
-      "BYE" // 15
+      "Michael Shanley", "BYE", "Tony Kennedy", "Ian Johnson",
+      "Phil Lapointe", "Michael Chesnut", "Gabriel Ptasienski", "BYE",
+      "Alexander McQuain", "Jacob Vehrs", "David Carrillo", "BYE",
+      "Steven Tommasello", "Benjamin Deforest", "Kat Hunter", "BYE"
     ];
 
     const rounds = [
@@ -776,7 +725,6 @@
           const seedText = seedElement.textContent.trim();
           const teamName = fullText.substring(seedText.length).trim();
           if (teamName === name) {
-            // Exact match only
             team.classList.add("highlighted");
           }
         }
@@ -792,7 +740,6 @@
     function resetBracket() {
       document.getElementById("championDisplay").classList.remove("show");
       initializeBracket();
-      // Re-fit after reset so users land back at the full-bracket base view
       requestAnimationFrame(fitBracketOnLoad);
     }
 
@@ -838,9 +785,6 @@
 
       // Apply zoom + update label
       updateZoom();
-
-      // Optional: center horizontally to finals column (commented out)
-      // scrollEl.scrollLeft = (container.scrollWidth * baseZoom - scrollEl.clientWidth) / 2;
     }
 
     // Initialize
