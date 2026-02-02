@@ -58,6 +58,7 @@
         }
 
         .subtitle {
+            font-family: 'Tinos', serif;
             font-size: 2.5rem;
             color: var(--primary);
             font-weight: 700;
@@ -372,8 +373,6 @@
 .bracket-half.right .round-header { text-align: left; }
 .bracket-scroll { overscroll-behavior-inline: contain; scroll-padding-inline: 24px; }
 .bracket-container { min-width: auto; transform-origin: top left; }
-        /* --- ADD THIS NEW CODE AT THE END OF YOUR STYLE BLOCK --- */
-
         /* --- HIDE THE SEED NUMBERS --- */
         .team .seed {
             display: none;
@@ -389,7 +388,8 @@
 
         <div class="controls">
             <button class="btn-primary" onclick="resetBracket()">Reset Bracket</button>
-            <button class="btn-accent" onclick="exportBracket()">Export Data</button>
+            <!--HIDDEN EXPORT BUTTON-->
+            <!--<button class="btn-accent" onclick="exportBracket()">Export Data</button>-->
             <div class="zoom-controls">
                 <button class="btn-secondary" onclick="zoomOut()">-</button>
                 <span id="zoomLevel">100%</span>
