@@ -612,18 +612,20 @@
         
         // --- FINAL, CORRECTED INITIALIZATION LOGIC ---
         window.addEventListener('load', () => {
-            initializeBracket();
-            const scrollEl = document.getElementById('bracketScroll');
-            const container = document.getElementById('bracketContainer');
-            const contentW = container.scrollWidth;
-            const viewW = scrollEl.clientWidth;
-            if (contentW > viewW) {
-                zoomLevel = (viewW - 20) / contentW;
-            }
-            updateZoom();
-		    }, 250); // A 250ms delay is sufficient for most font rendering.
+    		// A 100ms delay gives the browser time to render fonts after the page loads.
+		    setTimeout(() => {
+		        initializeBracket();
+		        const scrollEl = document.getElementById('bracketScroll');
+		        const container = document.getElementById('bracketContainer');
+		        const contentW = container.scrollWidth;
+		        const viewW = scrollEl.clientWidth;
+		        if (contentW > viewW) {
+		            zoomLevel = (viewW - 20) / contentW;
+		        }
+		        updateZoom();
+		    }, 100); 
+});
 
-        });
 // --- Allows user to click overlay to close it ---
 document.getElementById('championOverlay').addEventListener('click', () => {
     document.getElementById('championOverlay').classList.remove('show');
